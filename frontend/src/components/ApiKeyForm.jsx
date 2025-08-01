@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import.meta.env.VITE_BACKEND_URL
-
+import.meta.env.VITE_BACKEND_URL;
 
 const ApiKeyForm = ({
   apiKey,
@@ -14,19 +13,27 @@ const ApiKeyForm = ({
 }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [infoMessage, setInfoMessage] = useState(""); // 👉 new state
 
   const handleFetchActors = async (e) => {
     e.preventDefault();
     setError("");
+    setInfoMessage(
+      "⏳ Please wait 2–3 minutes while the backend server (hosted on Render free tier) wakes up.......<br/>🙏 Thanks for your patience!"
+    );
     setLoading(true);
     setHasFetchedActors(false);
 
     try {
-      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL || "http://localhost:5001"}/api/apify/actors`, { apiKey });
+      const res = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL || "http://localhost:5001"}/api/apify/actors`,
+        { apiKey }
+      );
       setActors(res.data);
       setSelectedActor(null);
       setInputSchema(null);
       setOutput(null);
+      setInfoMessage(""); // clear info once success
     } catch (err) {
       setActors([]);
       setError(err.response?.data?.error || "❌ Failed to fetch actors.");
@@ -37,9 +44,15 @@ const ApiKeyForm = ({
   };
 
   return (
-    <form onSubmit={handleFetchActors} className="space-y-4 bg-gray-50 p-6 rounded-lg border border-gray-200 shadow-sm">
+    <form
+      onSubmit={handleFetchActors}
+      className="space-y-4 bg-gray-50 p-6 rounded-lg border border-gray-200 shadow-sm"
+    >
       <div>
-        <label htmlFor="apiKey" className="block text-sm font-semibold text-gray-700 mb-1">
+        <label
+          htmlFor="apiKey"
+          className="block text-sm font-semibold text-gray-700 mb-1"
+        >
           🔑 Apify API Key
         </label>
         <input
@@ -55,6 +68,12 @@ const ApiKeyForm = ({
           required
         />
       </div>
+
+      {infoMessage && (
+        <div className="text-blue-700 bg-blue-100 border border-blue-300 px-4 py-2 rounded text-sm">
+           <div dangerouslySetInnerHTML={{ __html: infoMessage }} />
+        </div>
+      )}
 
       <div className="flex justify-end">
         <button
