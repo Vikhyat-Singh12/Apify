@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
+import.meta.env.VITE_BACKEND_URL
+
 
 const DynamicForm = ({ apiKey, actorId, inputSchema, setOutput }) => {
   const [formData, setFormData] = useState(() => {
@@ -49,7 +51,7 @@ const DynamicForm = ({ apiKey, actorId, inputSchema, setOutput }) => {
     setError("");
 
     try {
-      const res = await axios.post("http://localhost:5001/api/apify/run", {
+      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL || "http://localhost:5001"}/api/apify/schema`, {
         apiKey,
         actorId,
         input: formData,

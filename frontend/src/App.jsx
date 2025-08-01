@@ -24,7 +24,6 @@ function App() {
           </p>
         </div>
 
-        {/* Step 1: API Key Input */}
         <ApiKeyForm
           apiKey={apiKey}
           setApiKey={(val) => {
@@ -38,7 +37,6 @@ function App() {
           setHasFetchedActors={setHasFetchedActors}
         />
 
-        {/* Step 2: Actor Selection */}
         {actors.length > 0 ? (
           <ActorSelector
             actors={actors}
@@ -67,7 +65,6 @@ function App() {
           )
         )}
 
-        {/* Step 3: Input Form */}
         {inputSchema && selectedActor && (
           <DynamicForm
             apiKey={apiKey}
@@ -77,7 +74,6 @@ function App() {
           />
         )}
 
-        {/* Step 4: Output */}
         {output && <OutputViewer output={output} />}
       </div>
     </div>

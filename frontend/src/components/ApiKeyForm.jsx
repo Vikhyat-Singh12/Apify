@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
+import.meta.env.VITE_BACKEND_URL
+
 
 const ApiKeyForm = ({
   apiKey,
@@ -20,7 +22,7 @@ const ApiKeyForm = ({
     setHasFetchedActors(false);
 
     try {
-      const res = await axios.post("http://localhost:5001/api/apify/actors", { apiKey });
+      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL || "http://localhost:5001"}/api/apify/actors`, { apiKey });
       setActors(res.data);
       setSelectedActor(null);
       setInputSchema(null);

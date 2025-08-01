@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Loader2, AlertTriangle } from "lucide-react"; // Optional icons for style
+import.meta.env.VITE_BACKEND_URL
+import { Loader2, AlertTriangle } from "lucide-react"; 
 
 const ActorSelector = ({
   actors,
@@ -23,7 +24,7 @@ const ActorSelector = ({
     setLoading(true);
 
     try {
-      const res = await axios.post("http://localhost:5001/api/apify/schema", {
+      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL || "http://localhost:5001"}/api/apify/schema`, {
         apiKey,
         actorId,
       });

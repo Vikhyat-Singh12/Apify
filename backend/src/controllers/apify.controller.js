@@ -30,22 +30,18 @@ export const getActorSchema = async (req, res) => {
     const response = await axios.get(`https://api.apify.com/v2/acts/${actorPath}?token=${apiKey}`);
     const data = response.data?.data;
 
-    // Check if the actor has an input schema or example input
     if (!data) {
       return res.status(404).json({ error: "Actor not found or no data available." });
     }
 
-    // Case 1: Full schema exists
     if (data?.inputSchema) {
       return res.json({ type: "schema", schema: data.inputSchema });
     }
 
-    // Case 2: Try to build schema using example input
     if (data?.exampleRunInput?.body) {
       try {
         const parsed = JSON.parse(data.exampleRunInput.body);
 
-        // Dynamically build startUrls if available
         let startUrlsValue = [];
         if (Array.isArray(parsed.startUrls)) {
           startUrlsValue = parsed.startUrls.map(item => ({ url: item.url || "" }));
@@ -84,7 +80,6 @@ export const getActorSchema = async (req, res) => {
       }
     }
 
-    // Case 3: Nothing found
     return res.status(404).json({ error: "No input schema or example input available." });
 
   } catch (error) {
@@ -128,15 +123,15 @@ export const runActor = async (req, res) => {
             }
         }
         );
-        console.log("Run initiated:", run.data);
+        // console.log("Run initiated:", run.data);
         const runId = run.data.data.id;
         const pollResult = await axios.get(`https://api.apify.com/v2/actor-runs/${runId}/wait-for-finish?token=${apiKey}`);
 
-        console.log("Run result:", pollResult.data);
+        // console.log("Run result:", pollResult.data);
 
         res.json(pollResult.data.data.output || { message: "No output returned." });
     } catch (error) {
-    console.error("Apify Error:", error.response?.data || error.message);
+    // console.error("Apify Error:", error.response?.data || error.message);
 
     // If Apify fails, return dummy result
     const dummyOutput = {
